@@ -1,0 +1,72 @@
+<div class="home">
+  <div class="home-content">
+    <span class="badge">Catalogue</span>
+
+    <h2>
+      <span>Nos produits</span>
+    </h2>
+
+    <p class="home-description">
+      Retrouvez ci-dessous la liste des produits disponibles, leur prix, leur
+      quantité en stock et leur popularité.
+    </p>
+
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Rechercher un produit..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </div>
+
+    <div class="table-container">
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Likes</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (product of filteredProducts(); track product.id) {
+            <tr>
+              <td>{{ product.id }}</td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.price }} DT</td>
+              <td>{{ product.quantity }}</td>
+              <td>❤️ {{ product.likes }}</td>
+              <td class="actions-cell">
+                <button class="btn-like" (click)="likeProduct(product.id)">
+                  Liker
+                </button>
+                <button
+                  class="btn-buy"
+                  (click)="buyProduct(product.id)"
+                  [disabled]="product.quantity === 0"
+                >
+                  {{ product.quantity === 0 ? 'Épuisé' : 'Acheter' }}
+                </button>
+                <button class="btn-delete" (click)="removeProduct(product.id)">
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">Aucun produit trouvé.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p class="home-description total-stock">
+      Valeur totale du stock : <strong>{{ totalValue() }} DT</strong>
+    </p>
+  </div>
+</div>

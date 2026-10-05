@@ -1,0 +1,82 @@
+<div class="home">
+  <div class="home-content">
+    <span class="badge">Événements</span>
+
+    <h2>
+      <span>Nos événements</span>
+    </h2>
+
+    <p class="home-description">
+      Découvrez la liste des événements à venir, leur lieu, leur prix et le
+      nombre de places disponibles.
+    </p>
+
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="🔍 Rechercher un événement..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </div>
+
+    <div class="table-container">
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>Titre</th>
+            <th>Date</th>
+            <th>Lieu</th>
+            <th>Prix</th>
+            <th>Places</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (event of filteredEvents(); track event.id) {
+            <tr>
+              <td>
+                <div class="event-title">{{ event.title }}</div>
+                <div class="event-desc">{{ event.description }}</div>
+              </td>
+              <td>{{ event.date | date: 'dd MMM yyyy' }}</td>
+              <td>📍 {{ event.location }}</td>
+              <td>
+                @if (event.price === 0) {
+                  <span class="price-badge free">Gratuit</span>
+                } @else {
+                  <span class="price-badge">{{ event.price }} DT</span>
+                }
+              </td>
+              <td>
+                @if (event.nbPlaces === 0) {
+                  <span class="places-badge full">Complet</span>
+                } @else if (event.nbPlaces <= 5) {
+                  <span class="places-badge low">{{ event.nbPlaces }} restantes</span>
+                } @else {
+                  <span class="places-badge">{{ event.nbPlaces }} places</span>
+                }
+              </td>
+              <td class="actions-cell">
+                <button
+                  class="btn-buy"
+                  (click)="reserveEvent(event.id)"
+                  [disabled]="event.nbPlaces === 0"
+                >
+                  {{ event.nbPlaces === 0 ? 'Complet' : 'Réserver' }}
+                </button>
+                <button class="btn-delete" (click)="removeEvent(event.id)">
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">Aucun événement trouvé.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
