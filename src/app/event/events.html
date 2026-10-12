@@ -58,6 +58,7 @@
                 }
               </td>
               <td class="actions-cell">
+                <a class="btn-detail" [routerLink]="['/events', event.id]">Détail</a>
                 <button
                   class="btn-buy"
                   (click)="reserveEvent(event.id)"

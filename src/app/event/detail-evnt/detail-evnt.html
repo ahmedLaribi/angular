@@ -1,0 +1,32 @@
+<div class="detail-page">
+  @if (event(); as ev) {
+    <div class="detail-card">
+      <a class="back-link" routerLink="/events">← Retour aux événements</a>
+
+      <h2>{{ ev.title }}</h2>
+      <p class="detail-desc">{{ ev.description }}</p>
+
+      <ul class="detail-list">
+        <li><strong>📅 Date :</strong> {{ ev.date | date: 'dd MMMM yyyy' }}</li>
+        <li><strong>📍 Lieu :</strong> {{ ev.location }}</li>
+        <li>
+          <strong>💰 Prix :</strong>
+          {{ ev.price === 0 ? 'Gratuit' : ev.price + ' DT' }}
+        </li>
+        <li>
+          <strong>🎟️ Places :</strong>
+          {{ ev.nbPlaces === 0 ? 'Complet' : ev.nbPlaces + ' places' }}
+        </li>
+      </ul>
+
+      <button class="btn-buy" (click)="reserve()" [disabled]="ev.nbPlaces === 0">
+        {{ ev.nbPlaces === 0 ? 'Complet' : 'Réserver' }}
+      </button>
+    </div>
+  } @else {
+    <div class="detail-card">
+      <p>Événement introuvable.</p>
+      <a class="back-link" routerLink="/events">← Retour aux événements</a>
+    </div>
+  }
+</div>

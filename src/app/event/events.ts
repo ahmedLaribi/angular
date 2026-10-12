@@ -1,7 +1,7 @@
 import { Component, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-
+import { RouterLink } from '@angular/router';
 
 export interface EventMl {
   id: number;
@@ -13,45 +13,47 @@ export interface EventMl {
   nbPlaces: number;
 }
 
+// Données exportées : le composant détail les importe depuis ce fichier
+export const eventsList = signal<EventMl[]>([
+  {
+    id: 1,
+    title: 'Conférence Angular',
+    date: '2026-10-15',
+    location: 'Tunis',
+    description: 'Une conférence sur les nouveautés Angular.',
+    price: 20,
+    nbPlaces: 50,
+  },
+  {
+    id: 2,
+    title: 'Workshop Spring Boot',
+    date: '2026-11-02',
+    location: 'Sousse',
+    description: 'Atelier pratique sur Spring Boot et les API REST.',
+    price: 15,
+    nbPlaces: 30,
+  },
+  {
+    id: 3,
+    title: 'Meetup DevOps',
+    date: '2026-11-20',
+    location: 'Sfax',
+    description: 'Rencontre autour des pratiques DevOps modernes.',
+    price: 0,
+    nbPlaces: 0,
+  },
+]);
+
 @Component({
   selector: 'app-events',
   standalone: true,
-  imports: [FormsModule, DatePipe],
+  imports: [FormsModule, DatePipe, RouterLink],
   templateUrl: './events.html',
   styleUrl: './events.css',
 })
 export class Events {
   searchTerm = signal('');
-
-  events = signal<EventMl[]>([
-    {
-      id: 1,
-      title: 'Conférence Angular',
-      date: '2026-10-15',
-      location: 'Tunis',
-      description: 'Une conférence sur les nouveautés Angular.',
-      price: 20,
-      nbPlaces: 50,
-    },
-    {
-      id: 2,
-      title: 'Workshop Spring Boot',
-      date: '2026-11-02',
-      location: 'Sousse',
-      description: 'Atelier pratique sur Spring Boot et les API REST.',
-      price: 15,
-      nbPlaces: 30,
-    },
-    {
-      id: 3,
-      title: 'Meetup DevOps',
-      date: '2026-11-20',
-      location: 'Sfax',
-      description: 'Rencontre autour des pratiques DevOps modernes.',
-      price: 0,
-      nbPlaces: 0,
-    },
-  ]);
+  events = eventsList;
 
   filteredEvents = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
