@@ -1,5 +1,11 @@
 import { Component, signal, computed } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -47,11 +53,12 @@ export const eventsList = signal<EventMl[]>([
 @Component({
   selector: 'app-events',
   standalone: true,
-  imports: [FormsModule, DatePipe, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, DatePipe, RouterLink],
   templateUrl: './events.html',
   styleUrl: './events.css',
 })
 export class Events {
+  // ---------- Liste et recherche ----------
   searchTerm = signal('');
   events = eventsList;
 
@@ -81,5 +88,66 @@ export class Events {
 
   removeEvent(id: number): void {
     this.events.update((list) => list.filter((e) => e.id !== id));
+  }
+
+  // ---------- Formulaire d'ajout ----------
+  showForm = false;
+
+  private readonly emptyForm = {
+    title: '',
+    description: '',
+    date: '',
+    location: '',
+    price: 0,
+    nbPlaces: 1,
+  };
+
+  eventForm = new FormGroup({
+    title: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3)],
+    }),
+    description: new FormControl('', { nonNullable: true }),
+    date: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    location: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    price: new FormControl(0, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.min(0)],
+    }),
+    nbPlaces: new FormControl(1, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.min(1)],
+    }),
+  });
+
+  // Raccourcis pour le HTML
+  get title() { return this.eventForm.controls.title; }
+  get date() { return this.eventForm.controls.date; }
+  get location() { return this.eventForm.controls.location; }
+  get price() { return this.eventForm.controls.price; }
+  get nbPlaces() { return this.eventForm.controls.nbPlaces; }
+
+  toggleForm(): void {
+    this.showForm = !this.showForm;
+    if (!this.showForm) {
+      this.eventForm.reset(this.emptyForm);
+    }
+  }
+
+  addEvent(): void {
+    if (this.eventForm.invalid) {
+      this.eventForm.markAllAsTouched();
+      return;
+    }
+
+    const value = this.eventForm.getRawValue();
+
+    this.events.update((list) => {
+      const nextId = list.length ? Math.max(...list.map((e) => e.id)) + 1 : 1;
+      return [...list, { id: nextId, ...value }];
+    });
+
+    this.eventForm.reset(this.emptyForm);
+    this.showForm = false;
   }
 }

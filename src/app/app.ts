@@ -14,3 +14,5 @@ import { Home } from './home/home'; // tu peux le retirer si plus utilisé direc
 export class App {
   protected title = 'app';
 }
+
+

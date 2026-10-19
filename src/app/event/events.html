@@ -11,6 +11,78 @@
       nombre de places disponibles.
     </p>
 
+
+
+<div class="add-event-bar">
+  <button type="button" class="btn-toggle" (click)="toggleForm()">
+    {{ showForm ? '✕ Fermer' : '+ Add event' }}
+  </button>
+</div>
+
+@if (showForm) {
+  <form class="event-form" [formGroup]="eventForm" (ngSubmit)="addEvent()">
+    <h3>Ajouter un événement</h3>
+
+    <div class="form-grid">
+      <div class="form-group full">
+        <label for="title">Titre</label>
+        <input id="title" type="text" formControlName="title" placeholder="Nom de l'événement">
+        @if (title.invalid && title.touched) {
+          @if (title.hasError('required')) {
+            <small class="error">Le titre est obligatoire.</small>
+          } @else if (title.hasError('minlength')) {
+            <small class="error">Le titre doit contenir au moins 3 caractères.</small>
+          }
+        }
+      </div>
+
+      <div class="form-group full">
+        <label for="description">Description</label>
+        <textarea id="description" rows="2" formControlName="description" placeholder="Courte description (facultatif)"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input id="date" type="date" formControlName="date">
+        @if (date.invalid && date.touched) {
+          <small class="error">La date est obligatoire.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="location">Lieu</label>
+        <input id="location" type="text" formControlName="location" placeholder="Ville ou salle">
+        @if (location.invalid && location.touched) {
+          <small class="error">Le lieu est obligatoire.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="price">Prix (DT)</label>
+        <input id="price" type="number" min="0" formControlName="price">
+        @if (price.invalid && price.touched) {
+          <small class="error">Le prix doit être supérieur ou égal à 0.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="nbPlaces">Places</label>
+        <input id="nbPlaces" type="number" min="1" formControlName="nbPlaces">
+        @if (nbPlaces.invalid && nbPlaces.touched) {
+          <small class="error">Il faut au moins 1 place.</small>
+        }
+      </div>
+    </div>
+
+<button type="submit" class="btn-add" [disabled]="eventForm.invalid">
+  Ajouter l'événement
+</button>  </form>
+}
+
+
+
+
+    
     <div class="search-bar">
       <input
         type="text"

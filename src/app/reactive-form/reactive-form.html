@@ -1,0 +1,96 @@
+<div class="forms-wrapper">
+
+  <!-- Formulaire de connexion -->
+  <form class="form-container" [formGroup]="form" (ngSubmit)="save()">
+    <h2>Connexion</h2>
+    <p class="subtitle">Accédez à votre compte</p>
+
+    <div class="form-group">
+      <label for="login">Name</label>
+      <input id="login" type="text" formControlName="login" placeholder="Votre nom" autocomplete="username">
+      @if (login.invalid && login.touched) {
+        <small class="error">Le nom est obligatoire.</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" placeholder="Votre mot de passe" autocomplete="current-password">
+      @if (password.invalid && password.touched) {
+        <small class="error">Le mot de passe est obligatoire.</small>
+      }
+    </div>
+
+    <button type="submit" [disabled]="form.invalid">Submit</button>
+  </form>
+
+  <!-- Formulaire d'inscription -->
+  <form class="form-container wide" [formGroup]="formUser" (ngSubmit)="saveUser()">
+    <h2>Inscription</h2>
+    <p class="subtitle">Créez votre compte</p>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" type="text" formControlName="name" placeholder="Votre nom">
+        @if (name.invalid && name.touched) {
+          <small class="error">Le nom est obligatoire.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="exemple@mail.com">
+        @if (email.invalid && email.touched) {
+          @if (email.hasError('required')) {
+            <small class="error">L'email est obligatoire.</small>
+          } @else if (email.hasError('email')) {
+            <small class="error">Format d'email invalide.</small>
+          }
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="cin">CIN</label>
+        <input id="cin" type="text" inputmode="numeric" maxlength="8" formControlName="cin" placeholder="8 chiffres">
+        @if (cin.invalid && cin.touched) {
+          @if (cin.hasError('required')) {
+            <small class="error">Le CIN est obligatoire.</small>
+          } @else if (cin.hasError('pattern')) {
+            <small class="error">Le CIN doit contenir exactement 8 chiffres.</small>
+          }
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="tel">Téléphone</label>
+        <input id="tel" type="tel" inputmode="numeric" maxlength="8" formControlName="tel" placeholder="8 chiffres">
+        @if (tel.invalid && tel.touched) {
+          @if (tel.hasError('required')) {
+            <small class="error">Le téléphone est obligatoire.</small>
+          } @else if (tel.hasError('pattern')) {
+            <small class="error">Le téléphone doit contenir exactement 8 chiffres.</small>
+          }
+        }
+      </div>
+
+      <div class="form-group full">
+        <label for="adresse">Adresse</label>
+        <input id="adresse" type="text" formControlName="adresse" placeholder="Rue, ville, code postal">
+        @if (adresse.invalid && adresse.touched) {
+          @if (adresse.hasError('required')) {
+            <small class="error">L'adresse est obligatoire.</small>
+          } @else if (adresse.hasError('minlength')) {
+            <small class="error">L'adresse doit contenir au moins 5 caractères.</small>
+          }
+        }
+      </div>
+
+      
+    </div>
+
+    <button type="submit" [disabled]="formUser.invalid">Register</button>
+  </form>
+
+</div>

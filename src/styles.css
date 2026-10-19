@@ -4,5 +4,7 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e8eaf6 0%, #f5f7fa 100%);
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
